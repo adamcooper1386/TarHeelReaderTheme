@@ -61,6 +61,34 @@ define([
         }
         templates.setImageSizes(view.image);
         newContent = templates.render("bookPage", view);
+        /**
+         * here seems to be where I would need to hook into the render logic to enable highlighting
+         * I'm imagining something similar to how silence works; always highlight clear and pass the
+         * audio  and text to a new function that would calculate a timeout and update the p.thr-text with
+         * a span wrapped at about the right time
+         *
+         * i think i'll need to return the Audio element from the speech.js play function to make this work,
+         * as the audio length doesn't seem to be available here
+         *
+         * something roughly like (please ignore the miss-mash of different languages):
+         * highlight(audioLength, text) {
+         *   wordcount = text.split(" ").length
+         *   audioSplit = audioLength / wordcount
+         *
+         *   forEach word in text.split(" ") do
+         *     setTimeout(()=>{
+         *       $('p.thr-text').html("new p tag with correct word wrapped in span.highlighted")
+         *       }, audioSplit * i)
+         *   end
+         * }
+         *
+         * this isn't an optinal strategy because some words take longer to say and I don't know
+         * how the speech synthisis works with punctuation etc, but this seems like a reasonable first
+         * guess.
+         *
+         * Another note: i'll need to get the highlight value (for right now just clear, or yellow) from the book
+         * or user settings; still need to track that down.
+        */
         speech.play(
           book.ID,
           pageNumber,
